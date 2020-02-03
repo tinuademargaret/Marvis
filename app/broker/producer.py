@@ -1,5 +1,8 @@
 from kafka import KafkaProducer
-from app.services.parser import parser
+
+"""
+single node kafka broker
+"""
 
 
 def publish_message(producer_instance, topic_name, key, value):
@@ -25,11 +28,12 @@ def connect_kafka_producer():
         return _producer
 
 
-def produce():
-    command = parser()
+def produce(command):
     try:
         kafka_producer = connect_kafka_producer()
-        publish_message(kafka_producer, 'product', 'command', command)
+        action = command.action
+        query = command.query
+        publish_message(kafka_producer, 'query', action, query)
         if kafka_producer is not None:
             kafka_producer.close()
     except Exception as e:

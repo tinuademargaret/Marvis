@@ -1,13 +1,7 @@
 from app import app
 from flask import render_template
 import requests
-from app.broker.consumer import consume
-
-
-def get_passage(consumer=consume()):
-    for msg in consumer:
-        pass
-
+from app.broker.consumer import consumer
 
 def get_bible(passage, version):
     response = requests.get(
@@ -18,21 +12,20 @@ def get_bible(passage, version):
     f.close()
 
 
-# key_word = transcribe_streaming(stream_file=os.path.join(
-#         os.path.dirname(__file__),
-#         'resources', 'cinderella.wav')
-#     )
-
-
-# if key_word == 'Open Bible':
-#     get_bible(passage='luke1.35', version='KJV')
-#     return 'bible.html'
-
 
 @app.route('/index')
 def index():
+    messages = consumer()
+    for message in messages:
+        action = message.key
+        query = message.value
+        if action == "openBible":
+            get_bible(query, )
+
+
+
+
+
     return render_template(bible())
 
 
-if __name__ == '__main__':
-    app.run()

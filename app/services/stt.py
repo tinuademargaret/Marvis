@@ -63,6 +63,7 @@ from google.cloud import speech_v1p1beta1 as speech
 import pyaudio
 from six.moves import queue
 from app.services.parser import parser
+from app.broker.producer import produce
 
 # Audio recording parameters
 STREAMING_LIMIT = 10000
@@ -298,7 +299,9 @@ def transcribe_streaming():
                                                    requests)
 
             # Now, put the transcription responses to use.
-            query = listen_print_loop(responses, stream)
+            command = listen_print_loop(responses, stream)
+            produce(command)
+
 
             if stream.result_end_time > 0:
                 stream.final_request_end_time = stream.is_final_end_time
