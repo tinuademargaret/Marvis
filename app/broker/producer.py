@@ -37,5 +37,5 @@ def produce(command):
         if kafka_producer is not None:
             kafka_producer.close()
     except Exception as e:
-        print('Exception while producing'+e)
+        print('Exception while producing'+str(e))
 
