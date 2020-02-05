@@ -1,26 +1,29 @@
 from google.cloud import speech_v1p1beta1 as speech
 from app.broker.producer import *
 from app.services.stt import *
-from app.controllers.controller import *
-
-from flask import render_template
-
-
-controller = Controller()
-
-@app.route("/index")
-def index():
-    render_template("index.html")
+# from app.controllers.controller import *
+# from google.cloud.speech import enums
+from google.cloud.speech import types
+# from flask import render_template
 
 
-@socketio.on('connect', namespace='/marvis')
-def test_connect():
-    # need visibility of the global thread object
-    print('Client connected')
-    controller.run()
+# controller = Controller()
+
+# @app.route("/index")
+# def index():
+#     render_template("index.html")
+#
+#
+# @socketio.on('connect', namespace='/marvis')
+# def test_connect():
+#     need visibility of the global thread object
+    # print('Client connected')
+    # controller.run()
 
 if __name__ == '__main__':
     """start bidirectional streaming from microphone input to speech API"""
+
+    app.run()
 
     client = speech.SpeechClient()
     config = speech.types.RecognitionConfig(

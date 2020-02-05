@@ -57,14 +57,14 @@ import time
 import re
 import sys
 from queue import Queue
-command_queue = Queue
+command_queue = Queue()
 
 # uses result_end_time currently only avaialble in v1p1beta, will be in v1 soon
 from google.cloud import speech_v1p1beta1 as speech
 import pyaudio
 from six.moves import queue
 from app.services.parser import parser
-from app.broker.producer import produce
+# from app.broker.producer import produce
 
 # Audio recording parameters
 STREAMING_LIMIT = 10000
@@ -237,13 +237,14 @@ def listen_print_loop(responses, stream):
 
         if result.is_final:
             command = parser(transcript)
+            command_queue.put(command)
+            print(command)
             sys.stdout.write(GREEN)
             sys.stdout.write('\033[K')
             sys.stdout.write(str(corrected_time) + ': ' + transcript + '\n')
 
             stream.is_final_end_time = stream.result_end_time
             stream.last_transcript_was_final = True
-            command_queue.put(command)
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.

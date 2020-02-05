@@ -5,6 +5,8 @@ os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = '/Users/tinuade/Downloads/marvis-
 DIALOGFLOW_PROJECT_ID = 'marvis-vdohmu'
 DIALOGFLOW_LANGUAGE_CODE = 'en'
 SESSION_ID = 'me'
+from google.protobuf.json_format import MessageToJson
+import json
 
 """
 keywords = 'Marvis open bible 
@@ -22,8 +24,12 @@ def parser(transcript):
     query_input = dialogflow.types.QueryInput(text=text_input)
     try:
         response = session_client.detect_intent(session=session, query_input=query_input)
-        command.action = response.query_result.action
-        command.query = response.query_result.parameters.given_name + response.query_result.parameters.number + response.query_result.parameters.number1.join("")
+        response = MessageToJson(response)
+        response = json.loads(response)
+        print(response)
+        command['action'] = response['queryResult']['action']
+        command['query'] = response['queryResult']['parameters']['given-name'] + str(response['queryResult']['parameters']['number'])
+                           # + response['queryResult']['parameters']['number1'].join("")
         return command
     except InvalidArgument:
         raise
