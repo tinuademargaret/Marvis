@@ -1,7 +1,9 @@
 from google.cloud import speech_v1p1beta1 as speech
+from app import app
 from app.broker.producer import *
 from app.services.stt import *
 # from app.controllers.controller import *
+# from flask import render_template
 # from google.cloud.speech import enums
 from google.cloud.speech import types
 # from flask import render_template
@@ -9,22 +11,20 @@ from google.cloud.speech import types
 
 # controller = Controller()
 
+
 # @app.route("/index")
 # def index():
-#     render_template("index.html")
-#
-#
+    # render_template("index.html")
+
+
 # @socketio.on('connect', namespace='/marvis')
 # def test_connect():
-#     need visibility of the global thread object
-    # print('Client connected')
+#     print('Client connected')
     # controller.run()
+
 
 if __name__ == '__main__':
     """start bidirectional streaming from microphone input to speech API"""
-
-    app.run()
-
     client = speech.SpeechClient()
     config = speech.types.RecognitionConfig(
         encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
@@ -60,7 +60,9 @@ if __name__ == '__main__':
 
             # Now, put the transcription responses to use.
             listen_print_loop(responses, stream)
-            produce(command_queue.get())
+            command = command_queue.get()
+            print(command)
+            produce(command)
 
 
             if stream.result_end_time > 0:
@@ -76,9 +78,5 @@ if __name__ == '__main__':
             stream.new_stream = True
 
 
-#
 
-    # main()
-
-# [END speech_transcribe_infinite_streaming]
 
