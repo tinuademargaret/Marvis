@@ -57,6 +57,7 @@ import time
 import re
 import sys
 from queue import Queue
+
 command_queue = Queue()
 
 # uses result_end_time currently only avaialble in v1p1beta, will be in v1 soon
@@ -64,10 +65,10 @@ from google.cloud import speech_v1p1beta1 as speech
 import pyaudio
 from six.moves import queue
 from app.services.parser import parser
-# from app.broker.producer import produce
+from app.broker.producer import produce
 
 # Audio recording parameters
-STREAMING_LIMIT = 10000
+STREAMING_LIMIT = 100000
 SAMPLE_RATE = 16000
 CHUNK_SIZE = int(SAMPLE_RATE / 10)  # 100ms
 
@@ -237,7 +238,8 @@ def listen_print_loop(responses, stream):
 
         if result.is_final:
             command = parser(transcript)
-            command_queue.put(command)
+            produce(command)
+            # command_queue.put(command)
             print(command)
             sys.stdout.write(GREEN)
             sys.stdout.write('\033[K')

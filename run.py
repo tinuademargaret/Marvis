@@ -60,9 +60,9 @@ if __name__ == '__main__':
 
             # Now, put the transcription responses to use.
             listen_print_loop(responses, stream)
-            command = command_queue.get()
-            print(command)
-            produce(command)
+            # command = command_queue.get()
+            # print(command)
+            # produce(command)
 
 
             if stream.result_end_time > 0:

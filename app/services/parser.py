@@ -28,16 +28,21 @@ def parser(transcript):
         response = json.loads(response)
         print(response)
         command['action'] = response['queryResult']['action']
-        command['query'] = response['queryResult']['parameters']['given-name'] + str(response['queryResult']['parameters']['number'])
+        number = str(response['queryResult']['parameters']['number'])
+        number = number.split('.')[0]
+        if response['queryResult']['parameters']['number1']:
+            verse = response['queryResult']['parameters']['number1']
+            verse = '-'.join([str(int(elem)) for elem in verse])
+            command['query'] = response['queryResult']['parameters']['given-name'] + str(number) +":"+ verse
+            return  command
+        command['query'] = response['queryResult']['parameters']['given-name'] +str(number)
                            # + response['queryResult']['parameters']['number1'].join("")
         return command
     except InvalidArgument:
         raise
+    except KeyError:
+        pass
 
-    print("Query text:", response.query_result.query_text)
-    print("Detected intent:", response.query_result.intent.display_name)
-    print("Detected intent confidence:", response.query_result.intent_detection_confidence)
-    print("Fulfillment text:", response.query_result.fulfillment_text)
 
 
 
