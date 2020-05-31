@@ -1,47 +1,3 @@
-# import io
-# import os
-#
-#
-# def transcribe_streaming(stream_file):
-#
-#     """Streams transcription of the given audio file."""
-#     from google.cloud import speech
-#     from google.cloud.speech import enums
-#     from google.cloud.speech import types
-#     client = speech.SpeechClient()
-#
-#     with io.open(stream_file, 'rb') as audio_file:
-#         content = audio_file.read()
-#
-    # In practice, stream should be a generator yielding chunks of audio data.
-    # stream = [content]
-    # requests = (types.StreamingRecognizeRequest(audio_content=chunk)
-    #             for chunk in stream)
-
-    # config = types.RecognitionConfig(
-    #     encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
-    #     sample_rate_hertz=44100,
-    #     audio_channel_count=2,
-    #     language_code='en-US')
-    # streaming_config = types.StreamingRecognitionConfig(config=config)
-
-    # streaming_recognize returns a generator.
-    # responses = client.streaming_recognize(streaming_config, requests)
-
-    # for response in responses:
-        # Once the transcription has settled, the first result will contain the
-        # is_final result. The other results will be for subsequent portions of
-        # the audio.
-        # for result in response.results:
-        #     print('Finished: {}'.format(result.is_final))
-        #     print('Stability: {}'.format(result.stability))
-        #     alternatives = result.alternatives
-            # The alternatives are ordered from most likely to least.
-            # for alternative in alternatives:
-            #     print('Confidence: {}'.format(alternative.confidence))
-            #     return u'Transcript: {}'.format(alternative.transcript)
-
-
 """Google Cloud Speech API sample application using the streaming API.
 NOTE: This module requires the dependencies `pyaudio` and `termcolor`.
 To install using pip:
@@ -237,9 +193,9 @@ def listen_print_loop(responses, stream):
         # line, so subsequent lines will overwrite them.
 
         if result.is_final:
+            #get the parsed result from parser.py and produce it via producer.py
             command = parser(transcript)
             produce(command)
-            # command_queue.put(command)
             print(command)
             sys.stdout.write(GREEN)
             sys.stdout.write('\033[K')
@@ -250,11 +206,11 @@ def listen_print_loop(responses, stream):
 
             # Exit recognition if any of the transcribed phrases could be
             # one of our keywords.
-            #if re.search(r'\b(exit|quit)\b', transcript, re.I):
-             #   sys.stdout.write(YELLOW)
-             #    sys.stdout.write('Exiting...\n')
-             #    stream.closed = True
-             #    break
+            if re.search(r'\b(exit|quit)\b', transcript, re.I):
+                sys.stdout.write(YELLOW)
+                sys.stdout.write('Exiting...\n')
+                stream.closed = True
+                break
 
         else:
             sys.stdout.write(RED)

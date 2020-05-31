@@ -34,9 +34,9 @@ def parser(transcript):
             verse = response['queryResult']['parameters']['number1']
             verse = '-'.join([str(int(elem)) for elem in verse])
             command['query'] = response['queryResult']['parameters']['given-name'] + str(number) +":"+ verse
-            return  command
+            return command
         command['query'] = response['queryResult']['parameters']['given-name'] +str(number)
-                           # + response['queryResult']['parameters']['number1'].join("")
+
         return command
     except InvalidArgument:
         raise
