@@ -1,1 +1,2 @@
 # Marvis
+Marvis is a form of voice controlled presentation navigation system. A very good user story would be a pastor in church giving a sermon. When the pastor calls on a verse of the bible to be displayed to the audience, someone has to manually put the text into a search engine and then displays it on a projector screen. With this project the pastor should be able to call on a bible verse and have it displayed to his audience without human intervention.
